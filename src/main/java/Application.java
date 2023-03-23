@@ -32,6 +32,8 @@ public class Application {
         }
 
         // Dang nhap thanh cong
+        // test push code hàm main
+        System.out.println("Test123");
         showMenu();
 
         in.close();
