@@ -10,18 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountDAO {
-    public Account getById(long id) {
+    public Account getById(int id) {
         Account account = null;
         try {
             Connection conn = MyConnection.getConnection();
-            // Chuan bi cau lenh, thuc thi
             String sql = "SELECT * FROM `accounts` WHERE `id` = " + id + " LIMIT 1";
             Statement stmt = conn.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql);
-
             if (resultSet.next()) {
                 account = new Account();
-                account.setId(resultSet.getLong("id"));
+                account.setId(resultSet.getInt("id"));
                 account.setUsername(resultSet.getString("username"));
             }
             resultSet.close();
@@ -32,17 +30,19 @@ public class AccountDAO {
         }
         return account;
     }
+
     public Account getByUserNameAndPassword(String username, String password) {
         Account account = null;
         try {
             Connection conn = MyConnection.getConnection();
-            String sql = String.format("SELECT id, username FROM accounts WHERE username='%s' AND password='%s' LIMIT 1 ",
+            String sql = String.format("SELECT id, username FROM accounts WHERE username=N'%s' AND password=N'%s' LIMIT 1 ",
                     username, password);
+
             Statement stmt = conn.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql);
             if (resultSet.next()) {
                 account = new Account();
-                account.setId(resultSet.getLong("id"));
+                account.setId(resultSet.getInt("id"));
                 account.setUsername(resultSet.getString("username"));
             }
         } catch (Exception e) {
@@ -51,12 +51,15 @@ public class AccountDAO {
 
         return account;
     }
+
     public List<Account> getAll() {
 
         List<Account> accountList = new ArrayList<>();
         try {
             Connection conn = MyConnection.getConnection();
             String sql = "SELECT * FROM accounts ";
+
+            // THUC THI
             Statement stmt = conn.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql);
             while (resultSet.next()) {
@@ -72,6 +75,28 @@ public class AccountDAO {
 
         return accountList;
     }
+
+
+    public void insert(Account a) {
+        final String sql = String.format("INSERT  INTO `accounts` VALUES ( NULL,'%s','%s' ) ",
+                a.getUsername(), a.getPassword()
+        );
+        try {
+            Connection conn = MyConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            long rs = stmt.executeUpdate(sql);
+
+            if (rs == 0) {
+                System.out.println("Thêm thất bại");
+            }
+
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void update(Account a, int id) {
         Account tmp = getById(id);
         if (tmp == null) {
@@ -97,25 +122,8 @@ public class AccountDAO {
         }
 
     }
-    public void insert(Account a) {
-        final String sql = String.format("INSERT  INTO `accounts` VALUES ( NULL,'%s','%s' ) ",
-                a.getUsername(), a.getPassword()
-        );
-        try {
-            Connection conn = MyConnection.getConnection();
-            Statement stmt = conn.createStatement();
-            long rs = stmt.executeUpdate(sql);
 
-            if (rs == 0) {
-                System.out.println("Thêm thất bại");
-            }
 
-            stmt.close();
-            conn.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     public void delete(int id) {
         Account a = getById(id);
         if (a == null) {

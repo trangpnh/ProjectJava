@@ -1,126 +1,127 @@
 package model;
 
 public class Employee {
-    private long employee_id;
-    private String fullname;
-    private String birthday;
-    private String address;
-    private String gender;
-    private String phone;
-    private String salary;
-    private  String email;
-    private  String position;
-    private long department_id;
+    private int EmployeeID;
+    private String FullName;
+    private String Phone;
+    private String Email;
+    private String DateOfBirth;
+    private String Gender;
+    private String Address;
+    private int Salary;
+    private String Position;
+    private int DepartmentID;
+
 
     public Employee() {
     }
 
-    public Employee(long employee_id, String fullname, String birthday, String address, String gender, String phone, String salary, String email, String position, long department_id) {
-        this.employee_id = employee_id;
-        this.fullname = fullname;
-        this.birthday = birthday;
-        this.address = address;
-        this.gender = gender;
-        this.phone = phone;
-        this.salary = salary;
-        this.email = email;
-        this.position = position;
-        this.department_id = department_id;
+    public Employee(int employeeID, String fullName, String phone, String email, String dateOfBirth, String gender, String address, String position, int salary, int departmentID) {
+        EmployeeID = employeeID;
+        FullName = fullName;
+        Phone = phone;
+        Email = email;
+        DateOfBirth = dateOfBirth;
+        Gender = gender;
+        Address = address;
+        Position = position;
+        Salary = salary;
+        DepartmentID = departmentID;
     }
 
-    public long getEmployee_id() {
-        return employee_id;
+    public int getEmployeeID() {
+        return EmployeeID;
     }
 
-    public void setEmployee_id(long employee_id) {
-        this.employee_id = employee_id;
+    public void setEmployeeID(int employeeID) {
+        EmployeeID = employeeID;
     }
 
-    public String getFullname() {
-        return fullname;
+    public String getFullName() {
+        return FullName;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    public String getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setFullName(String fullName) {
+        FullName = fullName;
     }
 
     public String getPhone() {
-        return phone;
+        return Phone;
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getSalary() {
-        return salary;
-    }
-
-    public void setSalary(String salary) {
-        this.salary = salary;
+        Phone = phone;
     }
 
     public String getEmail() {
-        return email;
+        return Email;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        Email = email;
+    }
+
+    public String getDateOfBirth() {
+        return DateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        DateOfBirth = dateOfBirth;
+    }
+
+    public String getGender() {
+        return Gender;
+    }
+
+    public void setGender(String gender) {
+        Gender = gender;
+    }
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
     }
 
     public String getPosition() {
-        return position;
+        return Position;
     }
 
     public void setPosition(String position) {
-        this.position = position;
+        Position = position;
     }
 
-    public long getDepartment_id() {
-        return department_id;
+    public int getSalary() {
+        return Salary;
     }
 
-    public void setDepartment_id(long department_id) {
-        this.department_id = department_id;
+    public void setSalary(int salary) {
+        Salary = salary;
+    }
+
+    public int getDepartmentID() {
+        return DepartmentID;
+    }
+
+    public void setDepartmentID(int departmentID) {
+        DepartmentID = departmentID;
     }
 
     @Override
     public String toString() {
         return "Employee{" +
-                "employee_id=" + employee_id +
-                ", fullname='" + fullname + '\'' +
-                ", birthday='" + birthday + '\'' +
-                ", address='" + address + '\'' +
-                ", gender='" + gender + '\'' +
-                ", phone='" + phone + '\'' +
-                ", salary='" + salary + '\'' +
-                ", email='" + email + '\'' +
-                ", position='" + position + '\'' +
-                ", department_id=" + department_id +
+                "EmployeeID=" + EmployeeID +
+                ", FullName='" + FullName + '\'' +
+                ", Phone='" + Phone + '\'' +
+                ", Email='" + Email + '\'' +
+                ", DateOfBirth='" + DateOfBirth + '\'' +
+                ", Gender='" + Gender + '\'' +
+                ", Address='" + Address + '\'' +
+                ", Position='" + Position + '\'' +
+                ", Salary=" + Salary +
+                ", DepartmentID=" + DepartmentID +
                 '}';
     }
 }

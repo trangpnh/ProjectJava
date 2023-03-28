@@ -12,7 +12,8 @@ import java.util.List;
 
 public class DepartmentDAO {
     public List<Department> getAll() {
-        final String sql = "SELECT * FROM `departments`";
+
+        final String sql = "SELECT * FROM departments ";
 
         List<Department> departmentList = new ArrayList<>();
 
@@ -23,16 +24,15 @@ public class DepartmentDAO {
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                Department dept = new Department();
-                dept.setDepartment_id(rs.getLong("id"));
-                dept.setDepartment_name(rs.getString("Department_name"));
-                dept.setManager_id(rs.getLong("Manager_id"));
-                departmentList.add(dept);
+                Department d = new Department();
+                d.setDepartmentId(rs.getInt("DepartmentId"));
+                d.setDepartmentName(rs.getString("DepartmentName"));
+                d.setManagerId(rs.getInt("ManagerId"));
+                departmentList.add(d);
             }
             rs.close();
             stmt.close();
             conn.close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -40,93 +40,156 @@ public class DepartmentDAO {
         return departmentList;
     }
 
-    public void insert(Department e) {
-        final String sql = String.format("INSERT INTO departments VALUES (NULL,'%s','%d')",
-                e.getDepartment_name(), e.getManager_id()
-        );
-
+    public Department getById(int id) {
+        Department department = null;
         try {
+
             Connection conn = MyConnection.getConnection();
+
+            String sql = "SELECT * FROM departments WHERE DepartmentId = " + id + " LIMIT 1";
             Statement stmt = conn.createStatement();
 
-            int rs = stmt.executeUpdate(sql);
-            if (rs == 0) {
-                System.out.println("Thêm thất bại!");
+            ResultSet rs = stmt.executeQuery(sql);
+
+            if (rs.next()) {
+                department = new Department();
+                department.setDepartmentId(rs.getInt("DepartmentId"));
+                department.setDepartmentName(rs.getString("DepartmentName"));
+                department.setManagerId(rs.getInt("ManagerId"));
             }
+            // Dong tai nguyen
+            rs.close();
             stmt.close();
             conn.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return department;
     }
-    public void update(Department e, long id) {
-        Department dept = getById(id);
-        if(dept == null){
-            System.out.println("Không tồn tại nhân viên có id = " + id);
-            return;
-        }
-        final String sql = String.format("UPDATE departments SET `department_name`='%s' 'manager_id' = '%d' WHERE `department_id`='%d' " ,
-                e.getDepartment_name(), e.getManager_id(), id
-        );
 
-        System.out.println(sql);
+    public void insert(Department d) {
+        String sql = String.format("INSERT INTO departments VALUES ('%d','%s','%d')",
+                d.getDepartmentId(), d.getDepartmentName(), d.getManagerId());
         try{
             Connection conn = MyConnection.getConnection();
             Statement stmt = conn.createStatement();
             long rs = stmt.executeUpdate(sql);
 
             if (rs == 0) {
-                System.out.println("Cập nhật thất bại");
+                System.out.println("Thêm thất bại");
             }
 
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-        }
-    }
-
-    public Department getById(long id) {
-        try {
-            Connection conn = MyConnection.getConnection();
-            final String sql = "SELECT * FROM departments WHERE id = " + id;
-
-            Statement stmt = conn.createStatement();
-
-            ResultSet rs = stmt.executeQuery(sql);
-            Department dept = null;
-            if (rs.next()) {
-                dept = new Department();
-                dept.setDepartment_id(rs.getLong("id"));
-                dept.setDepartment_name(rs.getString("Department_name"));
-                dept.setManager_id(rs.getLong("Manager_id"));
-            }
-            rs.close();
             stmt.close();
             conn.close();
-            return dept;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
-        return null;
     }
 
-    public void delete(long id) {
+    public void update(Department d, int id) {
+        Department tmp = getById(id);
+        if (tmp == null) {
+            throw new RuntimeException("Bộ phận không tồn tại!");
+        }
+        final String sql = String.format("UPDATE departments SET " +
+                        " `DepartmentName` = '%s'," +
+                        " `ManagerId` = '%d' " +
+                        "  WHERE `DepartmentId` = '%d'",
+                d.getDepartmentName(), d.getManagerId(), id);
         try {
             Connection conn = MyConnection.getConnection();
-            final String sql = "DELETE FROM dapartments WHERE id = " + id;
-
             Statement stmt = conn.createStatement();
 
             long rs = stmt.executeUpdate(sql);
+
+            if (rs == 0) {
+                System.out.println("Cập nhật thất bại");
+            }
+
+            stmt.close();
+            conn.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
+    public void delete(int id) {
+        Department d = getById(id);
+        if (d == null) {
+            throw new RuntimeException("Bộ phận không tồn tại!");
+        }
+
+        final String sql = "DELETE FROM `departments` WHERE  `DepartmentId` =  '"+id+"' ";
+        try {
+            Connection conn = MyConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            long rs = stmt.executeUpdate(sql);
+
             if (rs == 0) {
                 System.out.println("Xoá thất bại");
             }
             stmt.close();
             conn.close();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 
+
+    // update manager
+    public void updateManager(int managerId, int departmentId) {
+        String sql = "" ;
+        if (managerId == 0){
+            sql = "UPDATE departments SET `ManagerID`= NULL WHERE `DepartmentID` = "+departmentId+"";
+        }else {
+            sql = "UPDATE departments SET `ManagerID`= "+managerId+" WHERE `DepartmentID` = "+departmentId+"";
+        }
+        try {
+
+            Connection conn = MyConnection.getConnection();
+            Statement stmt = conn.createStatement();
+
+            long rs = stmt.executeUpdate(sql);
+
+            if (rs == 0) {
+                System.out.println("Cập nhật thất bại");
+            }
+
+            stmt.close();
+            conn.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
+    public Department getByDeparmentId(int id) {
+        Department department = null;
+        try {
+
+            Connection conn = MyConnection.getConnection();
+
+            String sql = " SELECT d.DepartmentID as DepartmentID, d.ManagerID as ManagerID" +
+                    " FROM employees e" +
+                    " INNER JOIN departments d " +
+                    " ON e.DepartmentID = d.DepartmentID" +
+                    " AND e.EmployeeID = d.ManagerID" +
+                    " WHERE EmployeeID = "+id+"";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            if (rs.next()) {
+                department = new Department();
+                department.setDepartmentId(rs.getInt("DepartmentID"));
+                department.setManagerId(rs.getInt("ManagerID"));
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return department;
+    }
 }

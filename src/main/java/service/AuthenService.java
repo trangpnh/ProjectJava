@@ -3,27 +3,18 @@ package service;
 import dao.AccountDAO;
 import model.Account;
 
+import java.util.List;
+import java.util.Scanner;
+
 public class AuthenService {
     private final AccountDAO accountDAO = new AccountDAO();
+    private final List<Account> accountList = accountDAO.getAll();
+    private final Account account = new Account();
+    private final Scanner in = new Scanner(System.in);
+    private boolean flag = false;
 
     public boolean login(String userName, String password){
         Account account = accountDAO.getByUserNameAndPassword(userName, password);
         return account != null;
-    }
-
-    public void showAllAccount(){
-        System.out.println(accountDAO.getAll());
-    }
-
-    public void insertAccount(Account account){
-        accountDAO.insert(account);
-    }
-
-    public void updateAccount(Account account, int id){
-        accountDAO.update(account, id);
-    }
-
-    public void deleteAccount(int id){
-        accountDAO.delete(id);
     }
 }
